@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Mindfulness - Thiền và Học tập</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #e1bee7 0%, #ce93d8 50%, #ba68c8 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ba68c8, #ce93d8);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .stats-mini {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-mini {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd9);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #f48fb1;
+            transition: all 0.3s ease;
+        }
+
+        .stat-mini:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(186, 104, 200, 0.2);
+            border-color: #ba68c8;
+        }
+
+        .stat-mini-value {
+            font-size: 2em;
+            font-weight: 800;
+            color: #6a1b9a;
+            margin-bottom: 5px;
+        }
+
+        .stat-mini-label {
+            font-size: 0.85em;
+            color: #8e24aa;
+            font-weight: 500;
+        }
+
+        .chart-main {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(186, 104, 200, 0.15);
+            border: 2px solid #f8bbd9;
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #6a1b9a;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f8bbd9;
+        }
+
+        .click-hint {
+            text-align: center;
+            color: #ba68c8;
+            font-style: italic;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(186, 104, 200, 0.1);
+            border-radius: 15px;
+            border: 1px dashed #ba68c8;
+            font-size: 0.9em;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff, #fce4ec);
+            margin: 5% auto;
+            padding: 0;
+            border: 2px solid #ba68c8;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 650px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #ba68c8, #ce93d8);
+            color: white;
+            padding: 25px;
+            border-radius: 18px 18px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        .close {
+            color: white;
+            font-size: 1.8em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 25px;
+            color: #6a1b9a;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ba68c8;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            font-size: 0.85em;
+            color: #8e24aa;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            color: #6a1b9a;
+            line-height: 1.5;
+        }
+
+        .meditation-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .meditation-yes {
+            background: #e1bee7;
+            color: #4a148c;
+        }
+
+        .meditation-no {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        .mindful-score {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: 700;
+            color: white;
+            margin-right: 8px;
+        }
+
+        .score-5-6 { background: #ff8a65; }
+        .score-7-8 { background: #ab47bc; }
+        .score-9-10 { background: #7b1fa2; }
+
+        .reflection-full {
+            grid-column: 1 / -1;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #f8bbd9;
+            margin-top: 10px;
+        }
+
+        .reflection-text {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ba68c8;
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .stats-mini {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .detail-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧘‍♀️ Dashboard Mindfulness</h1>
+            <div class="subtitle">Thiền và Học tập hàng ngày | 30/05 - 20/06/2025</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="stats-mini">
+                <div class="stat-mini">
+                    <div class="stat-mini-value">22</div>
+                    <div class="stat-mini-label">Tổng ngày</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="stat-mini-value">13</div>
+                    <div class="stat-mini-label">Ngày thiền</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="stat-mini-value">7.9</div>
+                    <div class="stat-mini-label">Điểm TB</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="stat-mini-value">59%</div>
+                    <div class="stat-mini-label">Tỷ lệ thiền</div>
+                </div>
+            </div>
+
+            <div class="chart-main">
+                <div class="chart-title">📈 Điểm số Mindfulness theo thời gian</div>
+                <canvas id="mainChart" width="800" height="300"></canvas>
+            </div>
+
+            <div class="click-hint">
+                💡 Click vào bất kỳ điểm nào trên biểu đồ để xem thông tin chi tiết!
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="dayModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalDate">Chi tiết ngày</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <div class="detail-item">
+                        <div class="detail-label">🧘‍♂️ Thời gian thiền</div>
+                        <div class="detail-value" id="modalMeditation"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">📚 Hoạt động chính</div>
+                        <div class="detail-value" id="modalActivity"></div>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-item">
+                        <div class="detail-label">⭐ Điểm mindfulness</div>
+                        <div class="detail-value" id="modalScore"></div>
+                    </div>
+                </div>
+
+                <div class="detail-item reflection-full">
+                    <div class="detail-label">📝 Note thực hành</div>
+                    <div class="reflection-text" id="modalNote"></div>
+                </div>
+
+                <div class="detail-item reflection-full">
+                    <div class="detail-label">💭 Chiêm nghiệm</div>
+                    <div class="reflection-text" id="modalReflection"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu từ file mới
+        const rawData = [
+            {date: '30/05/2025', meditation: '5 phút', activity: 'Học C++', score: 5, note: '- Thiền 5 phút, chú ý hơi thở.\n - Học C++, chú ý từng dòng.\n - Ghi nhận cảm giác khi đi bộ.', reflection: 'Thực hành 3 lần. Tâm trí phân tán do căng thẳng thi cử. Đã tập trung lại sau vài phút.'},
+            {date: '31/05/2025', meditation: 'Không thực hành', activity: 'Chơi cầu lông', score: 7, note: '- Không thiền.\n - Chơi cầu lông, chú ý cử động.\n - Ghi nhận hơi thở khi nghỉ học Python.', reflection: 'Thực hành 3 lần. Tiếng ồn gây phân tâm, nhưng đã tập trung lại. Cảm thấy thư giãn hơn.'},
+            {date: '01/06/2025', meditation: '10 phút', activity: 'Học Python', score: 5, note: '- Thiền 10 phút, chú ý cảm giác cơ thể.\n - Học Python, chú ý từng dòng.\n - Ghi nhận âm thanh khi đi bộ sau lớp.', reflection: 'Thực hành 3 lần. Áp lực học làm khó tập trung. Thiền giúp tâm trí bình tĩnh.'},
+            {date: '02/06/2025', meditation: 'Không thực hành', activity: 'Học C++', score: 8, note: '- Không thiền.\n - Học C++, chú ý logic.\n - Ghi nhận cảm giác khi ăn trưa.', reflection: 'Thực hành 3 lần. Phân tâm nhẹ nhưng dễ tập trung lại. Cảm thấy tiến bộ trong tập trung.'},
+            {date: '03/06/2025', meditation: '5 phút', activity: 'Chơi cầu lông', score: 8, note: '- Thiền 5 phút, chú ý hơi thở.\n - Chơi cầu lông, chú ý cử động cơ thể.\n - Ghi nhận âm thanh khi đi bộ.', reflection: 'Thực hành 3 lần. Tâm trí phân tán nhẹ nhưng tập trung lại nhanh. Cảm thấy tràn đầy năng lượng.'},
+            {date: '04/06/2025', meditation: '10 phút', activity: 'Học Python', score: 6, note: '- Thiền 10 phút, chú ý sâu.\n - Học Python, chú ý hàm.\n - Ghi nhận hơi thở khi đợi xe buýt.', reflection: 'Thực hành 3 lần. Lo lắng làm khó tập trung. Thiền giúp tâm trí nhẹ nhàng hơn.'},
+            {date: '05/06/2025', meditation: 'Không thực hành', activity: 'Học C++', score: 7, note: '- Không thiền.\n - Học C++, hiểu logic.\n - Ghi nhận cảm giác khi tắm.', reflection: 'Thực hành 3 lần. Phân tâm nhẹ nhưng dễ tập trung lại. Cảm thấy tập trung hơn.'},
+            {date: '06/06/2025', meditation: '15 phút', activity: 'Chơi cầu lông', score: 9, note: '- Thiền 15 phút, tập trung sâu.\n - Chơi cầu lông, chú ý cử động mượt mà.\n - Ghi nhận màu sắc khi đi bộ.', reflection: 'Thực hành cả ngày. Ít phân tâm. Cảm thấy bình tĩnh và thư giãn.'},
+            {date: '07/06/2025', meditation: '10 phút', activity: 'Học Python', score: 7, note: '- Thiền 10 phút, chú ý cảm giác.\n - Học Python, chú ý từng dòng.\n - Ghi nhận cảm giác khi nằm nghỉ.', reflection: 'Thực hành 3 lần. Tâm trí phân tán chút nhưng tập trung lại được. Thiền giúp thư giãn.'},
+            {date: '08/06/2025', meditation: 'Không thực hành', activity: 'Học C++', score: 8, note: '- Không thiền.\n - Học C++, hiểu sâu.\n - Ghi nhận hơi thở khi làm việc nhà.', reflection: 'Thực hành 3 lần. Phân tâm nhẹ nhưng dễ tập trung lại. Cảm thấy tiến bộ trong tập trung.'},
+            {date: '09/06/2025', meditation: 'Không thực hành', activity: 'Chơi cầu lông', score: 8, note: '- Không thiền.\n - Chơi cầu lông, thiếu tập trung.\n - Ghi nhận hơi thở khi tắm.', reflection: 'Ngày khó khăn với nhiều phân tâm. Ghi nhận một số ngày khó hơn ngày khác.'},
+            {date: '10/06/2025', meditation: '10 phút', activity: 'Học Python', score: 7, note: '- Thiền 10 phút, chú ý.\n - Học Python, chú ý hàm.\n - Ghi nhận cảm giác khi ăn tối.', reflection: 'Thực hành 3 lần. Tiếng ồn gây phân tâm nhưng tập trung lại được. Thiền giúp tâm trí bình tĩnh.'},
+            {date: '11/06/2025', meditation: '15 phút', activity: 'Học C++', score: 9, note: '- Thiền 15 phút, tập trung sâu.\n - Học C++, hiểu logic rõ.\n - Ghi nhận âm thanh khi ngồi ở công viên.', reflection: 'Thực hành cả ngày. Ít phân tâm. Cảm thấy cân bằng và bình tĩnh.'},
+            {date: '12/06/2025', meditation: 'Không thực hành', activity: 'Chơi cầu lông', score: 9, note: '- Không thiền.\n - Chơi cầu lông, chú ý sức mạnh.\n - Ghi nhận hơi thở khi nghỉ.', reflection: 'Thực hành 3 lần. Phân tâm nhẹ nhưng dễ tập trung lại. Cảm thấy vui.'},
+            {date: '13/06/2025', meditation: '10 phút', activity: 'Học Python', score: 8, note: '- Thiền 10 phút, chú ý cảm giác.\n - Học Python, chú ý từng dòng.\n - Ghi nhận cảm giác khi đi bộ về nhà.', reflection: 'Thực hành 3 lần. Tâm trí phân tán chút nhưng tập trung lại nhanh. Thiền giúp thư giãn.'},
+            {date: '14/06/2025', meditation: '15 phút', activity: 'Học C++', score: 9, note: '- Thiền 15 phút, tập trung sâu.\n - Học C++, hiểu rõ.\n - Ghi nhận mùi khi nấu ăn.', reflection: 'Thực hành cả ngày. Ít phân tâm. Cảm thấy biết ơn.'},
+            {date: '15/06/2025', meditation: '20 phút', activity: 'Chơi cầu lông', score: 10, note: '- Thiền 20 phút, tập trung sâu.\n - Chơi cầu lông, chú ý từng cử động.\n - Ghi nhận cảm giác khi nằm trên giường.', reflection: 'Thực hành đầy đủ, ít phân tâm. Cảm thấy yên bình.'},
+            {date: '16/06/2025', meditation: 'Không thực hành', activity: 'Học Python', score: 9, note: '- Không thiền.\n - Học Python, chú ý hàm.\n - Ghi nhận hơi thở khi đọc sách.', reflection: 'Thực hành 3 lần. Phân tâm nhẹ nhưng dễ tập trung lại. Cảm thấy tiến bộ.'},
+            {date: '17/06/2025', meditation: '15 phút', activity: 'Học C++', score: 10, note: '- Thiền 15 phút, tập trung sâu.\n - Học C++, hiểu rõ.\n - Ghi nhận âm thanh khi đi bộ.', reflection: 'Thực hành cả ngày. Không phân tâm. Cảm thấy hài lòng.'},
+            {date: '18/06/2025', meditation: '20 phút', activity: 'Chơi cầu lông', score: 10, note: '- Thiền 20 phút, tập trung sâu.\n - Chơi cầu lông, chú ý từng cú đánh.\n - Ghi nhận cảm giác khi uống nước.', reflection: 'Thực hành hoàn hảo, không phân tâm. Cảm thấy trọn vẹn.'},
+            {date: '19/06/2025', meditation: '15 phút', activity: 'Học C++', score: 9, note: '- Thiền 15 phút, tập trung sâu.\n - Học C++, hiểu rõ.\n - Ghi nhận mùi khi đi bộ.\n - Ghi nhận vị khi ăn tối.', reflection: 'Thực hành cả ngày. Ít phân tâm. Cảm thấy bình tĩnh.'},
+            {date: '20/06/2025', meditation: '20 phút', activity: 'Học Python', score: 10, note: '- Thiền 20 phút, tập trung sâu.\n - Học Python, chú ý từng dòng.\n - Ghi nhận hơi thở trước khi ngủ.', reflection: 'Thực hành hoàn hảo, không phân tâm.'}
+        ];
+
+        // Tính toán stats
+        const totalDays = rawData.length;
+        const meditationDays = rawData.filter(d => !d.meditation.includes('Không')).length;
+        const averageScore = (rawData.reduce((sum, d) => sum + d.score, 0) / totalDays).toFixed(1);
+        const meditationRate = Math.round((meditationDays / totalDays) * 100);
+
+        // Cập nhật stats
+        document.querySelector('.stats-mini .stat-mini:nth-child(1) .stat-mini-value').textContent = totalDays;
+        document.querySelector('.stats-mini .stat-mini:nth-child(2) .stat-mini-value').textContent = meditationDays;
+        document.querySelector('.stats-mini .stat-mini:nth-child(3) .stat-mini-value').textContent = averageScore;
+        document.querySelector('.stats-mini .stat-mini:nth-child(4) .stat-mini-value').textContent = meditationRate + '%';
+
+        // Tạo chart chính
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        const mainChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: rawData.map(d => d.date.slice(0, 5)),
+                datasets: [{
+                    label: 'Điểm Mindfulness',
+                    data: rawData.map(d => d.score),
+                    borderColor: '#ba68c8',
+                    backgroundColor: 'rgba(186, 104, 200, 0.2)',
+                    tension: 0.4,
+                    pointBackgroundColor: rawData.map(d => 
+                        !d.meditation.includes('Không') ? '#ba68c8' : '#ff8a65'
+                    ),
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 3,
+                    pointRadius: 7,
+                    pointHoverRadius: 10,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    intersect: true,
+                    mode: 'point'
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(186, 104, 200, 0.95)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        borderColor: '#ba68c8',
+                        borderWidth: 2,
+                        cornerRadius: 10,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return `Điểm: ${context.parsed.y}/10`;
+                            },
+                            afterBody: function(context) {
+                                const dataIndex = context[0].dataIndex;
+                                const activity = rawData[dataIndex].activity;
+                                const meditation = rawData[dataIndex].meditation;
+                                return `\nHoạt động: ${activity}\nThiền: ${meditation}\n\n💡 Click để xem chi tiết!`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10,
+                        grid: {
+                            color: 'rgba(206, 147, 216, 0.3)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#8e24aa',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(206, 147, 216, 0.3)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#8e24aa',
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Modal Functions
+        function openModal(dayIndex) {
+            const day = rawData[dayIndex];
+            const modal = document.getElementById('dayModal');
+            
+            document.getElementById('modalDate').textContent = `📅 Chi tiết ngày ${day.date}`;
+            
+            const hasMeditation = !day.meditation.includes('Không');
+            const meditationClass = hasMeditation ? 'meditation-yes' : 'meditation-no';
+            document.getElementById('modalMeditation').innerHTML = 
+                `<span class="meditation-badge ${meditationClass}">${day.meditation}</span>`;
+            
+            document.getElementById('modalActivity').textContent = day.activity;
+            
+            const getScoreClass = (score) => {
+                if (score <= 6) return 'score-5-6';
+                if (score <= 8) return 'score-7-8';
+                return 'score-9-10';
+            };
+            
+            document.getElementById('modalScore').innerHTML = 
+                `<span class="mindful-score ${getScoreClass(day.score)}">${day.score}</span> ${day.score}/10 điểm`;
+            
+            document.getElementById('modalNote').textContent = day.note;
+            document.getElementById('modalReflection').textContent = day.reflection;
+            
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('dayModal').classList.remove('show');
+        }
+
+        // Event listeners
+        document.getElementById('mainChart').onclick = function(evt) {
+            const points = mainChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+            if (points.length) {
+                openModal(points[0].index);
+            }
+        };
+
+        document.getElementById('mainChart').style.cursor = 'pointer';
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('dayModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

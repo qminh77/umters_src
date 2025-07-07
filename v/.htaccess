@@ -1,0 +1,52 @@
+# Bảo mật
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set X-XSS-Protection "1; mode=block"
+
+# Ngăn truy cập file nhạy cảm
+<FilesMatch "\.(ini|log|env)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Bật rewrite cho URL thân thiện
+RewriteEngine On
+RewriteBase /
+
+# Loại bỏ .php trong URL
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Chuyển hướng URL có .php về URL không có .php
+RewriteCond %{THE_REQUEST} \s/+(.+)\.php[\s?]
+RewriteRule ^ /%1 [R=301,L]
+
+# Bảo vệ thư mục uploads
+<Directory "uploads">
+    Options -Indexes
+    <FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)$">
+        Order Deny,Allow
+        Deny from all
+    </FilesMatch>
+</Directory>
+
+# Chuyển hướng lỗi 404
+ErrorDocument 404 /404.php
+
+# Bảo vệ file .htaccess
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Bảo vệ file config
+<FilesMatch "^(config\.php|db\.php)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Enable PHP error logging
+php_flag log_errors on
+php_value error_log error.log

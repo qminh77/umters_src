@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plastic Crisis - Visual Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom cursor */
+        body {
+            cursor: none;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.3s ease;
+        }
+
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .loading-text {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 2rem;
+            z-index: 1000;
+        }
+
+        .nav-toggle {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-toggle:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: scale(1.1);
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 26, 26, 0.95));
+            backdrop-filter: blur(20px);
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .nav-item {
+            margin: 1rem 0;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu.active .nav-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .nav-item a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item a:hover {
+            color: #00ff88;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            animation: slowZoom 20s infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 100;
+            letter-spacing: -2px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: titleReveal 2s ease forwards 0.5s;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: titleReveal 2s ease forwards 1s;
+        }
+
+        @keyframes titleReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            writing-mode: vertical-rl;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* Gallery Sections */
+        .section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .section-header.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 100;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.7;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Masonry Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.8s ease;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .gallery-item.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 255, 136, 0.2);
+        }
+
+        .gallery-item.large {
+            grid-row: span 2;
+        }
+
+        .gallery-item.wide {
+            grid-column: span 2;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item.large .item-image {
+            height: 400px;
+        }
+
+        .item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .item-overlay {
+            opacity: 1;
+        }
+
+        .item-content {
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .item-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .item-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .item-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff6b6b;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Interactive Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin: 4rem 0;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 1s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+            transform: translateX(50px);
+        }
+
+        .timeline-item:nth-child(even).visible {
+            transform: translateX(0);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 0 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .timeline-image {
+            width: 300px;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Floating Action Buttons */
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10000;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: modalSlide 0.5s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: scale(0.8) translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .gallery-item.wide {
+                grid-column: span 1;
+            }
+            
+            .timeline-item {
+                flex-direction: column !important;
+                text-align: center;
+            }
+            
+            .timeline-image {
+                width: 100%;
+                margin: 1rem 0;
+            }
+            
+            .nav-menu {
+                width: 100%;
+            }
+        }
+
+        /* Particle Animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ff88;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Impact Counter */
+        .impact-counter {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 193, 7, 0.1));
+            border-radius: 30px;
+            margin: 4rem 0;
+        }
+
+        .counter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .counter-item {
+            padding: 2rem;
+        }
+
+        .counter-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 0.5rem;
+        }
+
+        .counter-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* Progress indicators */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            z-index: 9999;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-text">PLASTIC CRISIS</div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Particles -->
+    <div class="particles"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-toggle">
+            <span style="color: white;">☰</span>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item"><a href="#hero">Home</a></div>
+            <div class="nav-item"><a href="#problem">The Problem</a></div>
+            <div class="nav-item"><a href="#effects">Global Impact</a></div>
+            <div class="nav-item"><a href="#timeline">Timeline</a></div>
+            <div class="nav-item"><a href="#solutions">Solutions</a></div>
+            <div class="nav-item"><a href="#action">Take Action</a></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-bg" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4))"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">PLASTIC<br>CRISIS</h1>
+            <p class="hero-subtitle">A human century, a plastic eternity</p>
+        </div>
+        <div class="scroll-indicator">SCROLL DOWN</div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="section">
+        <div class="section-header">
+            <h2 class="section-title">An Alarming Reality</h2>
+            <p class="section-subtitle">Every minute that passes, over 1 million plastic bags are used worldwide. Let's look at these shocking numbers.</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item large">
+                <div class="item-image" style="background-image: url('https://us.123rf.com/450wm/pxhidalgo/pxhidalgo1508/pxhidalgo150800606/44326672-col%C3%B3n,-panama---15-th%C3%A1ng-4-n%C4%83m-2015:-x%E1%BB%AD-l%C3%BD-ch%E1%BA%A5t-th%E1%BA%A3i-v%C3%A0-%C3%B4-nhi%E1%BB%85m-r%E1%BB%ADa-tr%C3%AAn-b%E1%BB%9D-c%E1%BB%A7a-b%C3%A3i-bi%E1%BB%83n-%E1%BB%9F-th%C3%A0nh-ph%E1%BB%91.jpg?ver=6');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">Ocean of Plastic</h3>
+                    <p class="item-description">Millions of tons of plastic waste are floating in our oceans, creating massive "plastic continents." The Great Pacific Garbage Patch is 3 times the size of France, containing 1.8 trillion pieces of plastic.</p>
+                    <div class="item-stats">
+                        <div class="stat">
+                            <div class="stat-number">8M</div>
+                            <div class="stat-label">Tons/year</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">1.8T</div>
+                            <div class="stat-label">Plastic pieces</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://www.unep.org/plastic-pollution" target="_blank" style="color: #00ff88;">📊 Source: UNEP</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://ktmt.vnmediacdn.com/images/2022/06/06/30-1654472352-rac-thai-nhua.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">Massive Production</h3>
+                    <p class="item-description">The world produces over 460 million tons of plastic annually - equivalent to the weight of 46,000 football stadiums! 50% of this is used only once.</p>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://ourworldindata.org/plastic-pollution" target="_blank" style="color: #00ff88;">📊 Source: Our World in Data</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://aneco.com.vn/wp-content/uploads/chai-nhua-phai-mat-rau-lau-450-nam-de-phan-huy.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">Decomposition Time</h3>
+                    <p class="item-description">A plastic bottle takes 450 years to decompose completely - many times longer than our lifespan. A plastic bag can persist for hundreds of years.</p>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://www.rts.com/blog/plastic-pollution-in-the-ocean-facts-and-statistics/" target="_blank" style="color: #00ff88;">📊 Source: RTS</a>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://e2k9ube.cloudimg.io/v7/https://edienetlive.s3.eu-west-2.amazonaws.com/wp-content/uploads/sites/2/plastic-overshoot-day.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">Plastic Overshoot Day</h3>
+                    <p class="item-description">September 5, 2025 is predicted to be "Plastic Overshoot Day" - the day when plastic waste exceeds the world's processing capacity.</p>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://plasticovershoot.earth/" target="_blank" style="color: #00ff88;">📊 Source: Plastic Overshoot Day</a>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item wide">
+                <div class="item-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTqObE9HbpzVF8ca3dmOqVQTHldO8VMevszQ&s');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">Microplastics in Our Bodies</h3>
+                    <p class="item-description">Every week, you could be ingesting about 0.1-5 grams of microplastics - in the worst case equivalent to a credit card! They're present in drinking water, food, and even the air we breathe. Microplastics have been found in human brains, hearts, lungs, and placentas.</p>
+                    <div class="item-stats">
+                        <div class="stat">
+                            <div class="stat-number">0.1-5g</div>
+                            <div class="stat-label">Per week</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">83%</div>
+                            <div class="stat-label">Tap water has plastic</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">90%</div>
+                            <div class="stat-label">Sea salt has plastic</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://www.newcastle.edu.au/newsroom/featured/plastic-ingestion-by-people-could-be-equating-to-a-credit-card-a-week" target="_blank" style="color: #00ff88;">📊 Source: University of Newcastle & WWF</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqxvJJCr4V0mdV-tHIym1ztLvp-bojkOGgjg&s');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">Daily Plastic Waste</h3>
+                    <p class="item-description">Every day, the equivalent of over 2,000 garbage trucks full of plastic are dumped into oceans, rivers, and lakes worldwide.</p>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://www.unep.org/plastic-pollution" target="_blank" style="color: #00ff88;">📊 Source: UN Environment</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="impact-counter">
+            <h3 style="margin-bottom: 2rem; font-size: 2rem;">Impact as of now</h3>
+            <div class="counter-grid">
+                <div class="counter-item">
+                    <div class="counter-number" data-target="8000000">0</div>
+                    <div class="counter-label">Tons of plastic into oceans/year</div>
+                </div>
+                <div class="counter-item">
+                    <div class="counter-number" data-target="100000">0</div>
+                    <div class="counter-label">Marine animals die/year</div>
+                </div>
+                <div class="counter-item">
+                    <div class="counter-number" data-target="1000000">0</div>
+                    <div class="counter-label">Plastic bags used/minute</div>
+                </div>
+                <div class="counter-item">
+                    <div class="counter-number" data-target="8">0</div>
+                    <div class="counter-label">Billion $ cleanup cost</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">
+                📊 Data sources: <a href="https://earth.org/data_visualization/how-many-marine-animals-does-ocean-plastic-kill/" target="_blank" style="color: #00ff88;">Earth.org</a>, 
+                <a href="https://www.pewtrusts.org/en/research-and-analysis/articles/2018/09/24/plastic-pollution-affects-sea-life-throughout-the-ocean" target="_blank" style="color: #00ff88;">Pew Charitable Trusts</a>, 
+                <a href="https://ourworldindata.org/plastic-pollution" target="_blank" style="color: #00ff88;">Our World in Data</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Effects Section -->
+    <section id="effects" class="section">
+        <div class="section-header">
+            <h2 class="section-title">Impact on Our World</h2>
+            <p class="section-subtitle">Each image below is clear evidence of the environmental disaster we are creating</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item large">
+                <div class="item-image" style="background-image: url('https://danviet.mediacdn.vn/296231569849192448/2023/6/17/1-16869817654892101967261.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🐢 Wildlife Tragedy</h3>
+                    <p class="item-description">Picture a sea turtle swimming in the ocean, mistaking a plastic bag for its favorite jellyfish. It swallows the plastic bag and dies in agony. Every year, over 100,000 marine animals - from turtles to whales, seabirds - die from plastic. As animal lovers, we cannot let this continue!</p>
+                    <div class="item-stats">
+                        <div class="stat">
+                            <div class="stat-number">700</div>
+                            <div class="stat-label">Species affected</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">90%</div>
+                            <div class="stat-label">Seabirds have plastic</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://www.biologicaldiversity.org/campaigns/ocean_plastics/" target="_blank" style="color: #00ff88;">📊 Source: Center for Biological Diversity</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('data:image/jpeg;base64,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');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🏥 Human Health</h3>
+                    <p class="item-description">Plastic isn't just out there - it's infiltrating our bodies! Tiny microplastics sneak into drinking water, seafood, even table salt. Studies show microplastics can cause cardiovascular problems, cancer, and respiratory disorders.</p>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://hsph.harvard.edu/news/microplastics-a-growing-challenge-to-health-and-the-environment/" target="_blank" style="color: #00ff88;">📊 Source: Harvard T.H. Chan School</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://qcvn.com.vn/wp-content/uploads/2019/05/4-phuong-phap-xu-ly-chat-thai-rac-thai-hieu-qua-nhat-hien-nay.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">💰 Economic Burden</h3>
+                    <p class="item-description">Cleaning up plastic waste is a massive burden. Every year, the world spends over $8 billion to collect and process plastic in the oceans - money that could build hundreds of schools or hospitals!</p>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://www.biologicaldiversity.org/campaigns/ocean_plastics/" target="_blank" style="color: #00ff88;">📊 Source: Center for Biological Diversity</a>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://images2.thanhnien.vn/zoom/1200_630/528068263637045248/2024/2/28/tu-phan-anh-ban-doc1-1709117803950987625831-99-0-739-1024-crop-1709117818619854316782.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🌱 Ecosystem Destruction</h3>
+                    <p class="item-description">Plastic waste clogs drainage systems, causing floods and destroying the natural habitats of many plant and animal species.</p>
+                </div>
+            </div>
+            <div class="gallery-item wide">
+                <div class="item-image" style="background-image: url('https://sosmoitruong.com/wp-content/uploads/2021/06/z2555270946411_0f22c468be779bf3d6e864656e76d331.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🌡️ Climate Change</h3>
+                    <p class="item-description">Plastic production releases billions of tons of greenhouse gases, heating the planet faster. Last year alone, the plastic industry created emissions equivalent to 600 coal-fired power plants! This accelerates storms, floods, and heat waves affecting our lives.</p>
+                    <div class="item-stats">
+                        <div class="stat">
+                            <div class="stat-number">3.4%</div>
+                            <div class="stat-label">Total emissions</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">1.8B</div>
+                            <div class="stat-label">Tons CO2/year</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://thesustainableagency.com/blog/environmental-impact-of-plastic-pollution/" target="_blank" style="color: #00ff88;">📊 Source: Sustainable Agency</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://www.ecobaent.vn/files/2020/02/19/anh-huong-cua-rac-thai-den-nguon-nuoc-1.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🌊 Groundwater Pollution</h3>
+                    <p class="item-description">Decomposing plastic releases toxic substances into soil and groundwater, threatening clean water sources for millions of people.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="section">
+        <div class="section-header">
+            <h2 class="section-title">The Journey of Plastic</h2>
+            <p class="section-subtitle">From its creation to becoming an environmental disaster</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfIIOjZBCVGgAjbntyaypxMSp3xjOuue9ajw&s');"></div>
+                <div class="timeline-content">
+                    <h3>1907 - Plastic is Invented</h3>
+                    <p>Leo Baekeland created Bakelite, the first synthetic plastic. No one could have imagined this would be the beginning of an environmental crisis.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-image" style="background-image: url('https://media.thuonghieucongluan.vn/uploads/2020/12/18/anh-2-nhua-tien-phong-1608256519.jpg');"></div>
+                <div class="timeline-content">
+                    <h3>1950s - Production Boom</h3>
+                    <p>Plastic production skyrocketed after World War II. Plastic was hailed as a "miracle" of the modern age.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-image" style="background-image: url('https://vcdn1-vnexpress.vnecdn.net/2017/11/18/bai-rac-khong-lo-nhu-luc-dia-noi-giua-thai-binh-duong-1510979606.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=LAI4AYHxI1DavsCNlpz_Cg');"></div>
+                <div class="timeline-content">
+                    <h3>1988 - Discovery of "Garbage Continent"</h3>
+                    <p>The first discovery of the massive plastic waste patch in the Pacific Ocean. Its size is 3 times that of France.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-image" style="background-image: url('https://s3-hni02.higiocloud.vn/gppm2/prod/cms/posts/nhieu-nuoc-tren-the-gioi-da-cam-su-dung-do-nhua-dung-1-lan/167383ed2fe34a489bc3f5bafcd82617.jpg');"></div>
+                <div class="timeline-content">
+                    <h3>2018 - Global Plastic Bag Bans</h3>
+                    <p>Many countries began banning single-use plastic bags. But is it early enough?</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-image" style="background-image: url('https://vcdn1-vnexpress.vnecdn.net/2020/01/20/Nhua-TQ-set-7021-1579508390.jpg?w=460&h=0&q=100&dpr=2&fit=crop&s=A-yitJbeIkevm6kXgIIJoQ');"></div>
+                <div class="timeline-content">
+                    <h3>2025 - Time for Action</h3>
+                    <p>Right now! We have one last chance to change the future of our planet.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="solutions" class="section">
+        <div class="section-header">
+            <h2 class="section-title">Solutions From Us</h2>
+            <p class="section-subtitle">Every small action you take makes a big difference</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://cdn2.tuoitre.vn/thumb_w/480/2018/3/26/logo-hinh-2-15220299892341633571278.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">♻️ Reduce</h3>
+                    <p class="item-description">Replace plastic bags with reusable cloth bags when shopping. A small change, big impact!</p>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://maioutdoors.vn/wp-content/uploads/2022/10/Binh-dung-nuoc-the-thao-01.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🔄 Reuse</h3>
+                    <p class="item-description">Use metal water bottles instead of buying plastic ones. Save money while protecting the environment.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item large">
+                <div class="item-image" style="background-image: url('https://dailythungrac.com/uploads/images/thung-rac-phan-loai-3-ngan.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🗂️ Recycle Properly</h3>
+                    <p class="item-description">Sort plastic waste and put it in recycling bins. Recycling 1 ton of plastic saves enough energy to drive a car 1,000 miles!</p>
+                    <div class="item-stats">
+                        <div class="stat">
+                            <div class="stat-number">1000</div>
+                            <div class="stat-label">Miles saved</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">85%</div>
+                            <div class="stat-label">Energy reduced</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                        <a href="https://thesustainableagency.com/blog/environmental-impact-of-plastic-pollution/" target="_blank" style="color: #00ff88;">📊 Source: Sustainable Agency</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://media-cdn-v2.laodong.vn/storage/newsportal/2023/8/16/1229653/Z4609361823455_18E44.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">📢 Spread the Message</h3>
+                    <p class="item-description">Share with friends why plastic pollution matters - maybe during lunch!</p>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="item-image" style="background-image: url('https://media.vov.vn/sites/default/files/styles/large_watermark/public/2024-02/nhung_nguoi_tre_tham_lang_don_rac_vi_moi_truong_5.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🏖️ Join Cleanup Efforts</h3>
+                    <p class="item-description">Participate in local beach cleanups and make new friends while saving the planet.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item wide">
+                <div class="item-image" style="background-image: url('https://ktmt.vnmediacdn.com/stores/news_dataimages/nguyenthiluan/072019/08/12/in_article/4532_pl1-84545.jpg');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-content">
+                    <h3 class="item-title">🌱 Sustainable Lifestyle</h3>
+                    <p class="item-description">From bamboo straws to glass food containers - every choice matters. One student started using reusable straws, and soon the whole class joined - imagine what you could do!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Section -->
+    <section id="action" class="section">
+        <div class="section-header">
+            <h2 class="section-title">Take Action Today!</h2>
+            <p class="section-subtitle">Don't wait, start with the simplest things</p>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal">
+        <div class="modal-content">
+            <div class="modal-close">×</div>
+            <img id="modal-image" src="" alt="" style="max-width: 100%; max-height: 100%;">
+        </div>
+    </div>
+
+    <script>
+        // Remove loading screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelector('.loading-screen').style.opacity = '0';
+                document.querySelector('.loading-screen').style.visibility = 'hidden';
+            }, 2000);
+        });
+
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX - 20 + 'px';
+                cursorFollower.style.top = e.clientY - 20 + 'px';
+            }, 100);
+        });
+
+        // Navigation toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            
+            // Stagger animation for nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.transitionDelay = `${index * 0.1}s`;
+                }, 0);
+            });
+        });
+
+        // Close nav when clicking a link
+        document.querySelectorAll('.nav-item a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animatable elements
+        document.querySelectorAll('.gallery-item, .section-header, .timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            document.querySelector('.progress-bar').style.transform = `scaleX(${scrollPercent / 100})`;
+        });
+
+        // Counter animation
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 50);
+        }
+
+        // Trigger counters when visible
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.counter-number');
+                    counters.forEach(counter => {
+                        const target = parseInt(counter.dataset.target);
+                        animateCounter(counter, target);
+                    });
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.impact-counter').forEach(counter => {
+            counterObserver.observe(counter);
+        });
+
+        // Particle system
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.querySelector('.particles').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 6000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 300);
+
+        // Image modal
+        const modal = document.querySelector('.modal');
+        const modalImage = document.querySelector('#modal-image');
+        const modalClose = document.querySelector('.modal-close');
+
+        document.querySelectorAll('.item-image').forEach(image => {
+            image.addEventListener('click', () => {
+                const bgImage = window.getComputedStyle(image).backgroundImage;
+                const imageUrl = bgImage.slice(4, -1).replace(/"/g, "");
+                modalImage.src = imageUrl;
+                modal.classList.add('active');
+            });
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Stagger gallery items animation
+        function staggerGalleryItems() {
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach((item, index) => {
+                item.style.transitionDelay = `${index * 0.1}s`;
+            });
+        }
+
+        staggerGalleryItems();
+
+        // Add hover effect for better interaction
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(2)';
+                cursorFollower.style.transform = 'scale(1.5)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursorFollower.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

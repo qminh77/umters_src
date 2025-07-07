@@ -1,0 +1,75 @@
+RewriteEngine On
+RewriteBase /
+
+# Loại bỏ .php từ URL
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Chuyển hướng nếu truy cập trực tiếp file .php
+RewriteCond %{THE_REQUEST} \s/(.+)\.php\s [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# Bảo vệ file cấu hình
+<FilesMatch "^(db_config\.php)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+
+Options -Indexes
+
+# Tăng cường bảo mật
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Bật Rewrite Engine
+RewriteEngine On
+
+# Cho phép truy cập trực tiếp các file tĩnh (CSS, JS, hình ảnh, v.v.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Rewrite cho trang tĩnh (chỉ áp dụng nếu không phải file hoặc thư mục)
+RewriteRule ^([^/]+)/?$ /site_static/$1/index.html [L]
+
+# Rewrite tất cả các request khác đến index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php [L]
+
+RewriteEngine On
+RewriteRule ^s/(.+)$ s.php [L,QSA]
+
+RewriteCond %{REQUEST_URI} !^/data_key\.php
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# Handle short URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9]+)$ shortlink.php?c=$1 [L,QSA]
+
+# Handle other PHP files normally
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)\.php$ $1.php [L,QSA]
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW HOTLINKID:SBPmyazISs
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?umters.club/.*$      [NC]
+RewriteRule .*\.(.*|jpg|jpeg|gif|png|bmp|tiff|avi|mpeg|mpg|wma|mov|zip|rar|exe|mp3|pdf|swf|psd|txt|html|htm|php)$ http://umters.club [R,NC]
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE SBPmyazISs:HOTLINKID
+
+
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW ERRORPAGEID:XPTsXOZVnY
+ErrorDocument 403 /403.html
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE XPTsXOZVnY:ERRORPAGEID
+

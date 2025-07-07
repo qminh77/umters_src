@@ -1,0 +1,117 @@
+[23-Apr-2025 03:49:52 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/converters.php on line 233
+[23-Apr-2025 03:49:52 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/converters.php on line 234
+[23-Apr-2025 04:05:49 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/lookup_tools.php on line 126
+[23-Apr-2025 04:19:16 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/shortlink.php on line 65
+[23-Apr-2025 05:07:48 UTC] PHP Warning:  Undefined variable $edit_error in /home/u459537937/domains/umters.club/public_html/manage_users.php on line 509
+[23-Apr-2025 05:07:48 UTC] PHP Warning:  Undefined variable $success_message in /home/u459537937/domains/umters.club/public_html/manage_users.php on line 512
+[23-Apr-2025 05:07:48 UTC] PHP Warning:  Undefined variable $password_message in /home/u459537937/domains/umters.club/public_html/manage_users.php on line 515
+[28-Apr-2025 09:02:16 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 86
+[28-Apr-2025 09:02:16 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 87
+[28-Apr-2025 09:02:16 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 88
+[28-Apr-2025 09:02:16 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 90
+[28-Apr-2025 09:02:16 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 91
+[28-Apr-2025 09:03:46 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'r.category_id' in 'ON' in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:278
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(278): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 278
+[28-Apr-2025 09:07:09 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 87
+[28-Apr-2025 09:07:09 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 89
+[28-Apr-2025 09:07:09 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 90
+[28-Apr-2025 09:07:09 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 92
+[28-Apr-2025 09:07:09 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 93
+[28-Apr-2025 09:31:54 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 87
+[28-Apr-2025 09:31:54 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 89
+[28-Apr-2025 09:31:54 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 90
+[28-Apr-2025 09:31:54 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 92
+[28-Apr-2025 09:31:54 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 93
+[28-Apr-2025 09:32:23 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 87
+[28-Apr-2025 09:32:23 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 89
+[28-Apr-2025 09:32:23 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 90
+[28-Apr-2025 09:32:23 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 92
+[28-Apr-2025 09:32:23 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 93
+[28-Apr-2025 09:32:23 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:203
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(203): mysqli_stmt->bind_param()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 203
+[20-Jun-2025 10:46:24 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[20-Jun-2025 10:46:38 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[20-Jun-2025 13:28:57 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[20-Jun-2025 15:03:17 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[20-Jun-2025 15:03:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[20-Jun-2025 15:03:24 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 03:26:34 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 03:26:37 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 03:26:40 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 03:26:41 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 03:26:41 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 03:34:05 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 03:34:07 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 09:00:33 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 09:16:57 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304
+[23-Jun-2025 13:27:04 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'u459537937_tool.resource_categories' doesn't exist in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php:304
+Stack trace:
+#0 /home/u459537937/domains/umters.club/public_html/tainguyen/index.php(304): mysqli->prepare()
+#1 {main}
+  thrown in /home/u459537937/domains/umters.club/public_html/tainguyen/index.php on line 304

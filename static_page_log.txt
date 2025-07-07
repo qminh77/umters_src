@@ -1,0 +1,98 @@
+[2025-05-10 15:27:57] Bắt đầu xử lý tải lên file ZIP
+[2025-05-10 15:27:57] MIME type của file: application/zip
+[2025-05-10 15:27:57] Tên thư mục: vietnam
+[2025-05-10 15:27:57] Đã mở file ZIP thành công
+[2025-05-10 15:27:57] Tất cả file đều an toàn, bắt đầu tạo thư mục
+[2025-05-10 15:27:57] Đã tạo thư mục thành công, bắt đầu giải nén
+[2025-05-10 15:27:57] Giải nén thành công
+[2025-05-10 15:27:57] URL trang tĩnh: http://umters.club/site_static/vietnam
+[2025-05-10 15:27:57] SQL Insert: INSERT INTO static_pages (folder_name, url, user_id) VALUES ('vietnam', 'http://umters.club/site_static/vietnam', 11)
+[2025-05-10 15:27:57] Lỗi ngoại lệ: Duplicate entry '0' for key 'PRIMARY'
+[2025-05-10 15:27:57] Đã xóa thư mục do lỗi ngoại lệ
+[2025-05-10 15:32:07] Bắt đầu xử lý tải lên file ZIP
+[2025-05-10 15:32:07] MIME type của file: application/zip
+[2025-05-10 15:32:07] Tên thư mục: vietnam
+[2025-05-10 15:32:07] Đã mở file ZIP thành công
+[2025-05-10 15:32:07] Tất cả file đều an toàn, bắt đầu tạo thư mục
+[2025-05-10 15:32:07] Đã tạo thư mục thành công, bắt đầu giải nén
+[2025-05-10 15:32:07] Giải nén thành công
+[2025-05-10 15:32:07] URL trang tĩnh: https://umters.club/site_static/vietnam
+[2025-05-10 15:32:07] SQL Insert: INSERT INTO static_pages (folder_name, url, user_id) VALUES ('vietnam', 'https://umters.club/site_static/vietnam', 11)
+[2025-05-10 15:32:07] Lỗi ngoại lệ: Duplicate entry '0' for key 'PRIMARY'
+[2025-05-10 15:32:07] Đã xóa thư mục do lỗi ngoại lệ
+[2025-05-10 15:40:34] Bắt đầu xử lý file ZIP cho thư mục: page1746891624
+[2025-05-10 15:40:34] Giải nén thành công vào: site_static/page1746891624
+[2025-05-10 15:40:34] Lỗi ngoại lệ: Duplicate entry '0' for key 'PRIMARY'
+[2025-05-10 15:42:02] Bắt đầu xử lý file ZIP cho thư mục: page1746891634
+[2025-05-10 15:42:02] Giải nén thành công vào: site_static/page1746891634
+[2025-05-10 15:42:02] Lỗi ngoại lệ: Duplicate entry '0' for key 'PRIMARY'
+[2025-05-10 15:45:34] Bắt đầu xử lý file ZIP cho thư mục: vhvietnam
+[2025-05-10 15:45:34] Thư mục đã tồn tại: site_static/vhvietnam
+[2025-05-10 15:45:54] Bắt đầu xử lý file ZIP cho thư mục: vietnam
+[2025-05-10 15:45:54] Giải nén thành công vào: site_static/vietnam
+[2025-05-10 15:45:54] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('vietnam', 'https://umters.club/site_static/vietnam', 11)
+[2025-05-10 15:51:37] Bắt đầu xử lý file ZIP cho thư mục: auco
+[2025-05-10 15:51:37] Giải nén thành công vào: site_static/auco
+[2025-05-10 15:51:37] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('auco', 'https://umters.club/auco', 11)
+[2025-05-22 05:43:00] Bắt đầu xử lý file ZIP cho thư mục: enviroment
+[2025-05-22 05:43:00] File không an toàn: 71682699-12150991-image-a-1_1685680583865.avif
+[2025-05-22 05:44:11] Bắt đầu xử lý file ZIP cho thư mục: plastic
+[2025-05-22 05:44:11] Giải nén thành công vào: site_static/plastic
+[2025-05-22 05:44:11] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('plastic', 'https://umters.club/plastic', 11)
+[2025-05-22 06:08:39] Yêu cầu xóa thư mục: plastic
+[2025-05-22 06:08:39] Xóa thành công: plastic
+[2025-05-22 06:09:58] Bắt đầu xử lý file ZIP cho thư mục: plastic
+[2025-05-22 06:09:58] Giải nén thành công vào: site_static/plastic
+[2025-05-22 06:09:58] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('plastic', 'https://umters.club/plastic', 11)
+[2025-05-23 00:28:19] Bắt đầu xử lý file ZIP cho thư mục: struct
+[2025-05-23 00:28:19] Giải nén thành công vào: site_static/struct
+[2025-05-23 00:28:19] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('struct', 'https://umters.club/struct', 11)
+[2025-06-15 03:46:58] Bắt đầu xử lý file ZIP cho thư mục: quocminh
+[2025-06-15 03:46:58] Giải nén thành công vào: site_static/quocminh
+[2025-06-15 03:46:58] Đã tạo file index.html mặc định
+[2025-06-15 03:46:58] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('quocminh', 'https://umters.club/quocminh', 11)
+[2025-06-15 03:47:34] Yêu cầu xóa thư mục: quocminh
+[2025-06-15 03:47:34] Xóa thành công: quocminh
+[2025-06-15 03:48:12] Bắt đầu xử lý file ZIP cho thư mục: quocminh
+[2025-06-15 03:48:12] Giải nén thành công vào: site_static/quocminh
+[2025-06-15 03:48:12] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('quocminh', 'https://umters.club/quocminh', 11)
+[2025-06-15 03:48:56] Bắt đầu xử lý file ZIP cho thư mục: page1749959292
+[2025-06-15 03:48:56] Giải nén thành công vào: site_static/page1749959292
+[2025-06-15 03:48:56] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('page1749959292', 'https://umters.club/page1749959292', 11)
+[2025-06-15 03:49:00] Yêu cầu xóa thư mục: quocminh
+[2025-06-15 03:49:00] Xóa thành công: quocminh
+[2025-06-15 03:49:18] Yêu cầu đổi tên từ page1749959292 thành mindful
+[2025-06-15 03:49:18] Đổi tên thành công: page1749959292 -> mindful
+[2025-06-15 04:01:54] Yêu cầu xóa thư mục: mindful
+[2025-06-15 04:01:54] Xóa thành công: mindful
+[2025-06-15 04:11:33] Bắt đầu xử lý file ZIP cho thư mục: mindful
+[2025-06-15 04:11:33] Giải nén thành công vào: site_static/mindful
+[2025-06-15 04:11:33] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('mindful', 'https://umters.club/mindful', 11)
+[2025-06-15 12:44:35] Bắt đầu xử lý file ZIP cho thư mục: minhthu
+[2025-06-15 12:44:35] Giải nén thành công vào: site_static/minhthu
+[2025-06-15 12:44:35] Đã tạo file index.html mặc định
+[2025-06-15 12:44:35] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('minhthu', 'https://umters.club/minhthu', 11)
+[2025-06-15 12:45:59] Yêu cầu xóa thư mục: minhthu
+[2025-06-15 12:45:59] Xóa thành công: minhthu
+[2025-06-15 12:46:08] Bắt đầu xử lý file ZIP cho thư mục: minhthu
+[2025-06-15 12:46:08] Giải nén thành công vào: site_static/minhthu
+[2025-06-15 12:46:08] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('minhthu', 'https://umters.club/minhthu', 11)
+[2025-06-17 14:08:23] Bắt đầu xử lý file ZIP cho thư mục: cocoon
+[2025-06-17 14:08:23] Giải nén thành công vào: site_static/cocoon
+[2025-06-17 14:08:23] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('cocoon', 'https://umters.club/cocoon', 11)
+[2025-06-28 12:29:08] Bắt đầu xử lý file ZIP cho thư mục: chitieu
+[2025-06-28 12:29:08] Giải nén thành công vào: site_static/chitieu
+[2025-06-28 12:29:08] Lưu database thành công: INSERT INTO static_pages (folder_name, url, user_id) 
+                                                                  VALUES ('chitieu', 'https://umters.club/chitieu', 11)

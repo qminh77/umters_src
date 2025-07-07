@@ -1,0 +1,185 @@
+
+
+.profile-info, .file-list, .user-list, .email-log-list, .qr-history {
+    margin-top: 20px;
+}
+
+.profile-info p, .admin-card p, .email-log-card p {
+    margin: 8px 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.profile-edit-form, .admin-edit-form, .add-user-form, .email-form, .edit-form, .qrcode-form, .expiry-config {
+    margin: 20px auto;
+    max-width: 500px;
+    padding: 15px;
+    background: var(--card-bg);
+    border-radius: var(--small-radius);
+    box-shadow: var(--shadow-light);
+}
+
+.profile-edit-form input, .admin-edit-form input, .add-user-form input, .email-form input, .email-form textarea, .edit-form input, .qrcode-form select, .qrcode-form input, .qrcode-form textarea, .expiry-config input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--small-radius);
+    background: #fff;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.profile-edit-form input:focus, .admin-edit-form input:focus, .add-user-form input:focus, .email-form input:focus, .email-form textarea:focus, .edit-form input:focus, .qrcode-form select:focus, .qrcode-form input:focus, .qrcode-form textarea:focus, .expiry-config input:focus {
+    border-color: var(--primary-gradient-end);
+    outline: none;
+}
+
+.email-form textarea, .qrcode-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+
+.admin-card, .email-log-card, .qr-history-card {
+    background: var(--card-bg);
+    border-radius: var(--small-radius);
+    padding: var(--small-padding);
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-card:hover, .email-log-card:hover, .qr-history-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.admin-actions, .email-actions, .qr-actions, .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+
+.file-list {
+    position: relative;
+}
+
+.file-actions {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.select-all {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.95rem;
+}
+
+
+.file-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    background: var(--card-bg);
+    border-radius: var(--small-radius);
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.file-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.file-checkbox {
+    margin-top: 5px;
+}
+
+.file-card img {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+    border-radius: var(--small-radius);
+    box-shadow: var(--shadow-light);
+}
+
+.file-card div {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-card p {
+    margin: 5px 0;
+    word-break: break-all;
+    font-size: 0.95rem;
+}
+
+.file-card a {
+    color: var(--primary-gradient-end);
+    text-decoration: none;
+}
+
+.file-card a:hover {
+    text-decoration: underline;
+}
+
+.qr-result {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.qr-result img {
+    max-width: 300px;
+    border-radius: var(--small-radius);
+    box-shadow: var(--shadow-light);
+}
+
+.qr-result .download-btn {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+.pagination a {
+    color: var(--primary-gradient-end);
+    text-decoration: none;
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--small-radius);
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background: var(--card-bg);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.field-group {
+    display: none;
+}
+
+.field-group.active {
+    display: block;
+}
+

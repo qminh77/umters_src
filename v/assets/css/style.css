@@ -1,0 +1,28 @@
+/* Hiệu ứng fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+.animate-fade-in-delay {
+    animation: fadeIn 1.5s ease-out;
+}
+
+/* Tùy chỉnh Tailwind */
+button:hover, a:hover {
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    transition: all 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    h1.text-5xl { font-size: 2.5rem; }
+    h2.text-4xl { font-size: 2rem; }
+}

@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* Highlight các khái niệm (thuật ngữ) */
+.term {
+    color: #007bff; /* Màu xanh đậm */
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #e7f1ff; /* Nền xanh nhạt */
+    padding: 2px 6px; /* Khoảng đệm nhỏ */
+    border-radius: 4px; /* Bo góc nhẹ */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.term:hover {
+    background-color: #cce5ff; /* Nền sáng hơn khi rê chuột */
+}
+
+/* Highlight các dẫn chứng (blockquote) */
+blockquote {
+    font-style: italic;
+    color: #555;
+    border-left: 6px solid #28a745; /* Viền trái màu xanh lá nổi bật */
+    padding: 10px 15px; /* Khoảng đệm rộng hơn */
+    background-color: #f8f9fa; /* Nền xám nhạt */
+    border-radius: 5px; /* Bo góc */
+    margin: 15px 0; /* Khoảng cách trên dưới */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Bóng nhẹ để nổi lên */
+}
+
+/* Highlight các luận điểm (tiêu đề h3 trong card) */
+.card h3 {
+    color: #dc3545; /* Màu đỏ nổi bật */
+    font-weight: 600; /* Đậm hơn */
+    padding-bottom: 8px; /* Khoảng cách dưới */
+    border-bottom: 2px solid #dc3545; /* Đường viền dưới đỏ */
+    margin-bottom: 15px; /* Khoảng cách với nội dung bên dưới */
+}
+
+/* Các kiểu dáng khác giữ nguyên */
+.hero {
+    background: url('https://via.placeholder.com/1500x500') no-repeat center;
+    background-size: cover;
+    color: #333;
+    border-radius: 15px; /* Bo góc cho phần hero */
+}
+
+.card {
+    margin-bottom: 20px;
+    border-radius: 10px; /* Bo góc cho card */
+}
+
+.accordion-item {
+    border-radius: 8px; /* Bo góc cho từng mục accordion */
+    margin-bottom: 10px; /* Thêm khoảng cách giữa các mục */
+}
+
+.accordion-button {
+    border-radius: 8px; /* Bo góc cho nút accordion khi đóng */
+}
+
+.accordion-button:not(.collapsed) {
+    border-bottom-left-radius: 0; /* Bỏ bo góc dưới khi mở */
+    border-bottom-right-radius: 0;
+}
+
+.accordion-body {
+    border-bottom-left-radius: 8px; /* Bo góc dưới của nội dung accordion */
+    border-bottom-right-radius: 8px;
+}
+
+.btn {
+    border-radius: 6px; /* Bo góc cho tất cả button */
+}
+
+.modal-content {
+    border-radius: 12px; /* Bo góc cho modal */
+}

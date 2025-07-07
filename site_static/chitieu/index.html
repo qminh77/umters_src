@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Budget Visualization</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        /* Chart container styling */
+        .chart-container {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        /* Responsive table */
+        @media (max-width: 640px) {
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-purple-100 min-h-screen font-sans">
+    <!-- Main container -->
+    <div class="container mx-auto px-4 py-12">
+        <!-- Header -->
+        <h1 class="text-4xl font-bold text-center text-indigo-800 mb-8 fade-in">
+            Kế Hoạch Chi Tiêu Tháng 7/2025
+        </h1>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center hover-scale fade-in">
+                <i class="fas fa-home text-3xl text-indigo-500 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-700">Cần Thiết</h3>
+                <p class="text-2xl font-bold text-indigo-600">9,810,000 ₫</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center hover-scale fade-in" style="animation-delay: 0.2s;">
+                <i class="fas fa-star text-3xl text-yellow-500 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-700">Mong Muốn</h3>
+                <p class="text-2xl font-bold text-yellow-600">5,620,000 ₫</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center hover-scale fade-in" style="animation-delay: 0.4s;">
+                <i class="fas fa-trash text-3xl text-red-500 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-700">Lãng Phí</h3>
+                <p class="text-2xl font-bold text-red-600">523,000 ₫</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="chart-container fade-in">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Phân Bố Chi Tiêu</h2>
+                <canvas id="pieChart"></canvas>
+            </div>
+            <div class="chart-container fade-in" style="animation-delay: 0.2s;">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Chi Tiêu Theo Hạng Mục</h2>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div> -->
+
+        <!-- Data Table -->
+        <div class="table-container bg-white rounded-xl shadow-lg p-6 fade-in" style="animation-delay: 0.4s;">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Chi Tiết Chi Tiêu</h2>
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="bg-indigo-100 text-indigo-800">
+                        <th class="p-3 rounded-tl-lg">Hạng Mục</th>
+                        <th class="p-3">Ngày</th>
+                        <th class="p-3">Cần Thiết</th>
+                        <th class="p-3">Mong Muốn</th>
+                        <th class="p-3 rounded-tr-lg">Lãng Phí</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Thuê nhà</td>
+                        <td class="p-3">5/7/2025</td>
+                        <td class="p-3">4,500,000 ₫</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Điện, nước, Internet</td>
+                        <td class="p-3">5/7/2025</td>
+                        <td class="p-3">700,000 ₫</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Đi chợ</td>
+                        <td class="p-3">Hàng tuần</td>
+                        <td class="p-3">3,000,000 ₫</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Phí gửi xe</td>
+                        <td class="p-3">31/7/2025</td>
+                        <td class="p-3">90,000 ₫</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Xăng xe</td>
+                        <td class="p-3">31/7/2025</td>
+                        <td class="p-3">400,000 ₫</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Mạng 4G</td>
+                        <td class="p-3">31/7/2025</td>
+                        <td class="p-3">150,000 ₫</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Uống trà sữa</td>
+                        <td class="p-3">Hàng tuần</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">150,000 ₫</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Xem phim, giải trí</td>
+                        <td class="p-3">23/7/2025</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">120,000 ₫</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Mua mỹ phẩm, đồ skincare</td>
+                        <td class="p-3">15/7/2025</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">2,500,000 ₫</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Mua sắm quần áo</td>
+                        <td class="p-3">7/7/2025</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">1,000,000 ₫</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Ăn vặt</td>
+                        <td class="p-3">3 lần/tuần</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">100,000 ₫</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Quà tặng sinh nhật</td>
+                        <td class="p-3">21/7/2025</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">500,000 ₫</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Đăng ký các gói streaming</td>
+                        <td class="p-3">31/7/2025</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">273,000 ₫</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Đăng ký các gói dùng AI</td>
+                        <td class="p-3">31/7/2025</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">470,000 ₫</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Đi du lịch</td>
+                        <td class="p-3">10/7/2025</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">1,500,000 ₫</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">Phí phát sinh</td>
+                        <td class="p-3">Dự phòng</td>
+                        <td class="p-3">500,000 ₫</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">-</td>
+                    </tr>
+                    <tr class="border-t font-semibold bg-indigo-50">
+                        <td class="p-3">TỔNG CỘNG</td>
+                        <td class="p-3">-</td>
+                        <td class="p-3">9,810,000 ₫</td>
+                        <td class="p-3">5,620,000 ₫</td>
+                        <td class="p-3">523,000 ₫</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="spending-level">
+    <h2>Mức Độ Chi Tiêu</h2>
+    <div class="charts-container">
+        <div class="chart-box">
+            <h3>Tỷ Lệ Chi Tiêu (Biểu Đồ Tròn)</h3>
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <h3>Số Tiền Chi Tiêu (Biểu Đồ Cột)</h3>
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+    <div class="top-spending">
+        <h3>Hạng Mục Chi Nhiều Nhất</h3>
+        <ul>
+            <li><span class="category necessary">Cần Thiết</span>: Thuê nhà - 4,500,000 ₫</li>
+            <li><span class="category wants">Mong Muốn</span>: Mua mỹ phẩm, đồ skincare - 2,500,000 ₫</li>
+            <li><span class="category waste">Lãng Phí</span>: Đăng ký các gói dùng AI - 470,000 ₫</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Tải Chart.js từ CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Dữ liệu cho biểu đồ
+const data = {
+    labels: ['Cần Thiết', 'Mong Muốn', 'Lãng Phí'],
+    datasets: [{
+        data: [9810000, 5620000, 523000], // Số tiền chi tiêu
+        backgroundColor: ['#4CAF50', '#FFC107', '#F44336'], // Màu sắc
+        borderColor: ['#388E3C', '#FFA000', '#D32F2F'],
+        borderWidth: 1
+    }]
+};
+
+// Biểu đồ tròn
+const pieChart = new Chart(document.getElementById('pieChart'), {
+    type: 'pie',
+    data: data,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: { font: { size: 14 } }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let value = context.raw;
+                        let total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        let percentage = ((value / total) * 100).toFixed(1);
+                        return `${context.label}: ${value.toLocaleString('vi-VN')} ₫ (${percentage}%)`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Biểu đồ cột
+const barChart = new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Cần Thiết', 'Mong Muốn', 'Lãng Phí'],
+        datasets: [{
+            label: 'Chi Tiêu (₫)',
+            data: [9810000, 5620000, 523000],
+            backgroundColor: ['#4CAF50', '#FFC107', '#F44336'],
+            borderColor: ['#388E3C', '#FFA000', '#D32F2F'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return value.toLocaleString('vi-VN') + ' ₫';
+                    }
+                }
+            }
+        },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return `${context.label}: ${context.raw.toLocaleString('vi-VN')} ₫`;
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+
+<style>
+.spending-level {
+    margin: 30px auto;
+    padding: 20px;
+    /*max-width: 900px;*/
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.spending-level h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+.charts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.chart-box {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.chart-box h3 {
+    text-align: center;
+    color: #555;
+    margin-bottom: 15px;
+}
+.top-spending {
+    margin-top: 30px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.top-spending h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+.top-spending ul {
+    list-style: none;
+    padding: 0;
+}
+.top-spending li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s;
+}
+.top-spending li:last-child {
+    border-bottom: none;
+}
+.top-spending li:hover {
+    background: #f0f0f0;
+}
+.category {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    margin-right: 10px;
+}
+.category.necessary {
+    background: #4CAF50;
+}
+.category.wants {
+    background: #FFC107;
+}
+.category.waste {
+    background: #F44336;
+}
+@media (max-width: 600px) {
+    .chart-box {
+        min-width: 100%;
+    }
+}
+</style>
+        </div>
+    </div>
+
+    <!-- JavaScript for Charts -->
+    <script>
+        // Data for charts
+        const budgetData = {
+            mustHave: 9810000,
+            niceToHave: 5620000,
+            wasted: 523000
+        };
+
+        const categories = [
+            { name: 'Thuê nhà', mustHave: 4500000 },
+            { name: 'Điện, nước, Internet', mustHave: 700000 },
+            { name: 'Đi chợ', mustHave: 3000000 },
+            { name: 'Phí gửi xe', mustHave: 90000 },
+            { name: 'Xăng xe', mustHave: 400000 },
+            { name: 'Mạng 4G', mustHave: 150000 },
+            { name: 'Uống trà sữa', niceToHave: 150000 },
+            { name: 'Xem phim, giải trí', niceToHave: 120000 },
+            { name: 'Mua mỹ phẩm, đồ skincare', niceToHave: 2500000 },
+            { name: 'Mua sắm quần áo', niceToHave: 1000000 },
+            { name: 'Ăn vặt', niceToHave: 100000 },
+            { name: 'Quà tặng sinh nhật', niceToHave: 500000 },
+            { name: 'Đăng ký các gói streaming', wasted: 273000 },
+            { name: 'Đăng ký các gói dùng AI', wasted: 470000 },
+            { name: 'Đi du lịch', niceToHave: 1500000 },
+            { name: 'Phí phát sinh', mustHave: 500000 }
+        ];
+
+        // Pie Chart
+        const pieChart = new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Cần Thiết', 'Mong Muốn', 'Lãng Phí'],
+                datasets: [{
+                    data: [budgetData.mustHave, budgetData.niceToHave, budgetData.wasted],
+                    backgroundColor: ['#4F46E5', '#FBBF24', '#EF4444'],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 14 } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                const value = context.raw;
+                                return `${context.label}: ${value.toLocaleString('vi-VN')} ₫`;
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        });
+
+        // Bar Chart
+        const barChart = new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: categories.map(c => c.name),
+                datasets: [
+                    {
+                        label: 'Cần Thiết',
+                        data: categories.map(c => c.mustHave || 0),
+                        backgroundColor: '#4F46E5'
+                    },
+                    {
+                        label: 'Mong Muốn',
+                        data: categories.map(c => c.niceToHave || 0),
+                        backgroundColor: '#FBBF24'
+                    },
+                    {
+                        label: 'Lãng Phí',
+                        data: categories.map(c => c.wasted || 0),
+                        backgroundColor: '#EF4444'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                        title: { display: true, text: 'Hạng Mục', font: { size: 14 } }
+                    },
+                    y: {
+                        stacked: true,
+                        title: { display: true, text: 'Số Tiền (₫)', font: { size: 14 } },
+                        ticks: {
+                            callback: (value) => value.toLocaleString('vi-VN')
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { size: 14 } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                const value = context.raw;
+                                return `${context.dataset.label}: ${value.toLocaleString('vi-VN')} ₫`;
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+    </script>
+</body>
+</html>
